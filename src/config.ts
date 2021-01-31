@@ -8,6 +8,7 @@ export type Config = Partial<{
     minify?: boolean;
     target?: string;
     plugins?: Plugin[];
+    bundle?: boolean;
   };
   assets: {
     baseDir?: string;

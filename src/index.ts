@@ -60,6 +60,7 @@ function getBuildMetadata(userConfig: Config) {
 
   const minify = userConfig.esbuild?.minify || false;
   const plugins = userConfig.esbuild?.plugins || [];
+  const bundle = userConfig.esbuild?.bundle || false;
  
   const esbuildOptions: BuildOptions = {
     outdir: outDir,
@@ -69,6 +70,7 @@ function getBuildMetadata(userConfig: Config) {
     minify,
     tsconfig: tsConfigFile,
     plugins,
+    bundle,
   };
 
   const assetPatterns = userConfig.assets?.filePatterns || ["**"];
@@ -85,7 +87,6 @@ function getBuildMetadata(userConfig: Config) {
 async function buildSourceFiles(esbuildOptions: Partial<BuildOptions>) {
   return await build({
     ...esbuildOptions,
-    bundle: false,
     format: "cjs",
     platform: "node",
   });
