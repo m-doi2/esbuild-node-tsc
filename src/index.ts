@@ -59,7 +59,8 @@ function getBuildMetadata(userConfig: Config) {
     "es6";
 
   const minify = userConfig.esbuild?.minify || false;
-
+  const plugins = userConfig.esbuild?.plugins || [];
+ 
   const esbuildOptions: BuildOptions = {
     outdir: outDir,
     entryPoints: srcFiles,
@@ -67,6 +68,7 @@ function getBuildMetadata(userConfig: Config) {
     target,
     minify,
     tsconfig: tsConfigFile,
+    plugins,
   };
 
   const assetPatterns = userConfig.assets?.filePatterns || ["**"];
