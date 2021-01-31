@@ -73,13 +73,15 @@ function getBuildMetadata(userConfig: Config) {
     bundle,
   };
 
-  const assetPatterns = userConfig.assets?.filePatterns || ["**"];
-
-  const assetsOptions = {
-    baseDir: userConfig.assets?.baseDir || "src",
-    outDir: outDir,
-    patterns: [...assetPatterns, `!**/*.{ts,js,tsx,jsx}`],
-  };
+  let assetsOptions: AssetsOptions | undefined = undefined;
+  if (userConfig.assets) {
+    const assetPatterns = userConfig.assets?.filePatterns || ["**"];
+    assetsOptions = {
+      baseDir: userConfig.assets?.baseDir || "src",
+      outDir: outDir,
+      patterns: [...assetPatterns, `!**/*.{ts,js,tsx,jsx}`],
+    };
+  }
 
   return { outDir, esbuildOptions, assetsOptions };
 }
@@ -94,11 +96,13 @@ async function buildSourceFiles(esbuildOptions: Partial<BuildOptions>) {
 
 type AssetsOptions = { baseDir: string; outDir: string; patterns: string[] };
 
-async function copyNonSourceFiles({
-  baseDir,
-  outDir,
-  patterns,
-}: AssetsOptions) {
+async function copyNonSourceFiles(options?: AssetsOptions) {
+  if (!options) return;
+  const {
+    baseDir,
+    outDir,
+    patterns,
+  } = options;
   const relativeOutDir = path.relative(baseDir, outDir);
   return await cpy(patterns, relativeOutDir, {
     cwd: baseDir,

@@ -13,7 +13,7 @@ export type Config = Partial<{
   assets: {
     baseDir?: string;
     filePatterns?: string[];
-  };
+  } | false;
 }>;
 
 export async function readUserConfig(configPath: string): Promise<Config> {
